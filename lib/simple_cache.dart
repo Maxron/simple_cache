@@ -6,3 +6,4 @@ library;
 export 'src/simple_cache_base.dart';
 export 'src/in_memory_cache.dart';
 export 'src/shared_preference_cache.dart';
+export 'src/serialization_delegate.dart';
