@@ -56,12 +56,20 @@ final value = await cache.getValue();
 
 ## Custom serialization
 
-You can also use predefined delegates like `IntSerializationDelegate`, `StringSerializationDelegate`, etc.
+You can also use predefined delegates like `IntSerializationDelegate`, `StringSerializationDelegate`, `BoolSerializationDelegate`, and `DoubleSerializationDelegate` to simplify serialization.
+
+### Example
 
 ```dart
-final delegate = IntSerializationDelegate();
-delegate.fromString("123"); // => 123
-delegate.formatString(456); // => "456"
+final intDelegate = IntSerializationDelegate();
+final stringDelegate = StringSerializationDelegate();
+final boolDelegate = BoolSerializationDelegate();
+final doubleDelegate = DoubleSerializationDelegate();
+
+int? i = intDelegate.fromString("42");
+String s = stringDelegate.formatString("hello");
+bool? b = boolDelegate.fromString("true");
+double? d = doubleDelegate.fromString("3.14");
 ```
 
 ## Additional information
