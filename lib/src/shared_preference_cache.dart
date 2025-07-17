@@ -19,9 +19,9 @@ class SharedPreferencesCacheObject<T> extends PersistenceCacheObject<T> {
   // 用於將物件轉換為字串和從字串轉換回物件
   // 如果提供了 serializer，則使用它；否則使用 fromString 和 toString
   // 注意：如果使用 serializer，則 fromString 和 toString 參數將被忽略
-  SimpleSerializationDelegate<T>? _serializer;
-  SimpleSerializationFromString<T>? _fromString;
-  SimpleSerializationFormatString<T>? _formatString;
+  final SimpleSerializationDelegate<T>? _serializer;
+  final SimpleSerializationFromString<T>? _fromString;
+  final SimpleSerializationFormatString<T>? _formatString;
 
   final String _cacheValueKey;
   final String _cacheTimestampKey;
@@ -87,9 +87,9 @@ class SharedPreferencesCacheObject<T> extends PersistenceCacheObject<T> {
       if (storedValue != null) {
         // 使用序列化委託將字串轉換為物件
         if (_serializer != null) {
-          _cachedValue = _serializer!.fromString(storedValue);
+          _cachedValue = _serializer.fromString(storedValue);
         } else if (_fromString != null && _formatString != null) {
-          _cachedValue = _fromString!(storedValue);
+          _cachedValue = _fromString(storedValue);
         }
       }
 
@@ -111,10 +111,10 @@ class SharedPreferencesCacheObject<T> extends PersistenceCacheObject<T> {
       String? serializedValue;
       if (_serializer != null) {
         // 使用序列化委託將物件轉換為字串
-        serializedValue = _serializer!.formatString(value);
+        serializedValue = _serializer.formatString(value);
       } else if (_fromString != null && _formatString != null) {
         // 使用 fromString 和 toString 進行序列化
-        serializedValue = _formatString!(value);
+        serializedValue = _formatString(value);
       }
       await _prefs!.setString(_cacheValueKey, serializedValue ?? '');
 

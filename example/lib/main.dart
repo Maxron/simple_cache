@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_cache/simple_cache.dart';
 
 void main() {
@@ -43,7 +42,6 @@ class _MyAppState extends State<MyApp> {
     );
 
     // SharedPreferences cache
-    final prefs = await SharedPreferences.getInstance();
     _prefsCache = SharedPreferencesCacheObject<String>(
       cacheKeyPrefix: 'example',
       ttl: _getUserTtl(),
@@ -54,12 +52,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _loadMemoryCache() async {
-    if (_memoryCache != null) {
-      final value = await _memoryCache.getValue() ?? 'null';
-      setState(() {
-        _memoryCacheRaw = value;
-      });
-    }
+    final value = await _memoryCache.getValue() ?? 'null';
+    setState(() {
+      _memoryCacheRaw = value;
+    });
   }
 
   Future<void> _loadPrefsCache() async {
@@ -68,18 +64,6 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _prefsCacheRaw = value;
       });
-    }
-  }
-
-  /// 計算 TTL 顯示文字（未用於目前的顯示）
-  String _getCacheTtlString(DateTime createdAt, Duration ttl) {
-    final expiresAt = createdAt.add(ttl);
-    final now = DateTime.now();
-    final remaining = expiresAt.difference(now);
-    if (remaining.isNegative) {
-      return '已過期';
-    } else {
-      return '${remaining.inSeconds}s';
     }
   }
 

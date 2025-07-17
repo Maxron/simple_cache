@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:simple_cache/simple_cache.dart';
 import 'package:simple_cache/src/in_memory_cache.dart';
