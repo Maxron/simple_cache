@@ -1,18 +1,72 @@
 # simple_cache
 
-A new Flutter plugin project.
+A lightweight caching abstraction for Flutter apps.  
+Supports both in-memory and persistent caching using shared preferences, with flexible TTL and value provider support.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/to/develop-plugins),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+- Easy-to-use cache interface with TTL support
+- In-memory cache (`InMemoryCacheObject`)
+- Persistent cache using SharedPreferences (`SharedPreferencesCacheObject`)
+- Customizable serialization logic
+- Value auto-refresh via `valueProvider`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Getting started
 
-The plugin project was generated without specifying the `--platforms` flag, no platforms are currently supported.
-To add platforms, run `flutter create -t plugin --platforms <platforms> .` in this directory.
-You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/to/pubspec-plugin-platforms.
+Add the dependency in your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  simple_cache: ^0.1.0
+```
+
+Then run:
+
+```bash
+flutter pub get
+```
+
+## Usage
+
+### In-memory cache
+
+```dart
+final cache = InMemoryCacheObject<int>(
+  value: 42,
+  ttl: Duration(minutes: 5),
+  valueProvider: () async => fetchValueFromServer(),
+);
+
+final value = await cache.getValue();
+```
+
+### Persistent cache (SharedPreferences)
+
+```dart
+final cache = SharedPreferencesCacheObject<int>(
+  cacheKeyPrefix: 'my_key',
+  ttl: Duration(minutes: 10),
+  fromString: (s) => int.tryParse(s),
+  toString: (v) => v.toString(),
+  valueProvider: () async => fetchValueFromServer(),
+);
+
+final value = await cache.getValue();
+```
+
+## Custom serialization
+
+You can also use predefined delegates like `IntSerializationDelegate`, `StringSerializationDelegate`, etc.
+
+```dart
+final delegate = IntSerializationDelegate();
+delegate.fromString("123"); // => 123
+delegate.formatString(456); // => "456"
+```
+
+## Additional information
+
+This library is useful when building apps that need caching behavior without depending on external databases.  
+Great for optimizing network requests and storing frequently accessed values with expiration.
+
+Contributions and issues welcome!
